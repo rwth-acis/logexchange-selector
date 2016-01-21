@@ -161,8 +161,8 @@ SelectorGadget = (function(_super) {
         var jid, password, proxyurl;
         jid = Strophe.getBareJidFromJid($('#loginJID').val()) + "/SelectorGadget";
         password = $('#loginPassword').val();
-        proxyurl = "ws://localhost:5280/xmpp-websocket";
-        //proxyurl = "ws://" + (Strophe.getDomainFromJid(jid)) + ":5280/xmpp-websocket";
+        //proxyurl = "ws://localhost:5280/xmpp-websocket";
+        proxyurl = "ws://" + (Strophe.getDomainFromJid(jid)) + ":5280/xmpp-websocket";
         conn = new Strophe.Connection(proxyurl);
         conn.connect(jid, password, function(status) {
             var stats;
