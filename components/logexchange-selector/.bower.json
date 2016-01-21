@@ -1,0 +1,36 @@
+{
+  "name": "logexchange-selector",
+  "authors": [
+    "István Koren",
+    "Andreas Guth"
+  ],
+  "description": "An element for selecting which XMPP stanzas to log.",
+  "keywords": [
+    "web-component",
+    "polymer"
+  ],
+  "main": "logexchange-selector.html",
+  "license": "https://raw.githubusercontent.com/rwth-acis/logexchange-selector/master/LICENSE",
+  "homepage": "https://github.com/rwth-acis/logexchange-selector/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "^4.0.0"
+  },
+  "_release": "061649902e",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "061649902e05c570c141d12434d59a4fc1de354d"
+  },
+  "_source": "git://github.com/rwth-acis/logexchange-selector.git",
+  "_target": "master",
+  "_originalSource": "rwth-acis/logexchange-selector",
+  "_direct": true
+}

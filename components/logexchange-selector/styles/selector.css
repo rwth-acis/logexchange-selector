@@ -1,0 +1,208 @@
+@CHARSET "UTF-8";
+
+#explorerForm {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
+
+#buttonDiv {
+  display: block;
+  width: 30px;
+  margin-top: 0.5em;
+  padding-bottom: 1.8em;
+}
+
+#resultContainerDiv {
+  width: 100%;
+  height: 370px;
+}
+
+#additionalInfoDiv {
+  margin-top: 0.5em;
+  background-color: #E8E8E8;
+  height: 1.5em;
+}
+
+.infoBarImage {
+  height: 1.5em;
+  cursor: pointer;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+#resultDiv {
+  width: 400px;
+  height: 350px;
+  overflow:auto;
+}
+
+#additionalInfoDiv {
+  font-size: 0.8em;
+}
+
+#invokationWorkingImage {
+  width: 250px;
+  height: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#invokationWorkingText {
+  text-align: center;
+  font-size: 1em;
+}
+
+.loginMessageDiv {
+  margin-top: 2em;
+  font-size: 1.0em;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.helpLink {
+  color: #0000FF;
+  cursor: help;
+  text-decoration: underline;
+}
+
+.loginImage {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.messageHeadingDiv {
+  margin-top: 1.5em;
+  font-size: 1.6em;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.messageImage {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.messageHeaderDiv {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+}
+
+.errorInfoSpan {
+  font-size: 0.9em;
+}
+
+.errorInfoLabelSpan {
+  font-weight: bold;
+  width: 9em;
+}
+
+.errorMessageSpan {
+  font-size: 0.9em;
+  width: 100%;
+}
+
+label {
+  clear: both;
+  /* float:left; */
+  line-height: 30px;
+  width: 30%;
+}
+
+input, textarea {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  /* width: 70%; */
+}
+
+button {
+    background: url("../images/wavebg2.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+#loginButton {
+  position: relative;
+  left: 30%;
+  width: 100px;
+  margin-top: 1.5em;
+}
+
+.addRemoveInput {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  width: 53%;
+}
+
+.addRemoveButton {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  width: 22%;
+}
+
+.radio {
+  margin-left: 0px;
+  margin-right: 1.4em;
+}
+
+#chartOptions {
+  display: none;
+  margin-top: 1em;
+}
+
+#graphOptions {
+  display: none;
+  margin-top: 1em;
+}
+
+#gadgetPreparedQuery {
+  width: 100%;
+}
+
+#popup {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  display: none;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 200;
+}
+#popupContent {
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  right: 15%;
+  z-index: 220;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  clear: both;
+}
+.popupValue {
+  position: absolute;
+  left: 120px;
+}
+#tooltip {
+  display: none;
+  border-style: solid;
+  border-width: 1px;
+  z-index: 500;
+  background-color: white;
+  position: absolute;
+  padding: 2px;
+  font-size: small;
+  border-radius: 6px;
+  filter: alpha(opacity=90);
+  opacity: 0.9;
+}

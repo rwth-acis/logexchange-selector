@@ -1,0 +1,190 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+An element for selecting which XMPP stanzas to log.
+
+Example:
+
+    <logexchange-selector><logexchange-selector>
+
+@demo demo/index.html
+@hero hero.svg
+-->
+
+<dom-module id="logexchange-selector">
+
+    <link rel="stylesheet" href="styles/selector.css">
+
+    <script type="text/javascript" src="scripts/openapp.js"></script>
+
+    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/strophe.js"></script>
+    <script type="text/javascript" src="scripts/strophe.disco.js"></script>
+    <script type="text/javascript" src="scripts/strophe.x.js"></script>
+    <script type="text/javascript" src="scripts/strophe.cmds.js"></script>
+    <script type="text/javascript" src="scripts/strophe.eventlog.js"></script>
+    <script type="text/javascript" src="scripts/strophe.logexchange.js"></script>
+    <script type="text/javascript" src="scripts/Gadgets.js"></script>
+    <script type="text/javascript" src="scripts/selector.js"></script>
+
+    <template>
+        <div id="loginDiv">
+            <form action="javascript:void(0);" class="loginForm" id="loginForm" name="loginForm">
+                <fieldset>
+                    <legend>XMPP Login</legend>
+                    <div>
+                        <div>
+                            <label for="jid">JID:</label>
+                            <input name="jid" type="email" placeholder="Your JID" required autofocus class="input" id="loginJID" value="bob@localhost"/>
+                        </div>
+                        <div>
+                            <label for="password">Password:</label>
+                            <input name="password" type="password" placeholder="Your Password" class="input" id="loginPassword" value="bob"/>
+                        </div>
+                        <div>
+                            <button type="button" id="loginButton">Login</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div id="ServerDiv" style="display:none;">
+            <form action="javascript:void(0);" class="loginForm" id="ServerForm" name="loginForm">
+                <fieldset>
+                    <legend>Server Selector</legend>
+                    <div title='To add a different Server to gather logs from, enter the domain and click "Check Server"'>
+                        <label for="server">Add Server:</label>
+                        <input name="server" id="addServer" type="text" placeholder="Logexchange XMPP Server" class="input" value=""></input>
+                    </div>
+                    <div title='Select a server here to start a logging session on that server with the "Status Logging" or "Stanza Logging" buttons'>
+                        <label for="serverChoose">Select Server:</label>
+                        <select id="serverChoose" name="serverChoose" required>
+                        </select>
+                    </div>
+                    <div style="float: left;">
+                        <button type="button" id="addButton" disabled>Check Server</button>
+                        <button title="Start a Status Logging Session on the selected server" type="button" id="StatusButton" disabled>Status Logging</button>
+                        <button title="Start a Stanza Logging Session on the selected server" type="button" id="StanzaButton" disabled>Stanza Logging</button>
+                        <button type="button" id="logoutButton">Logout</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div id="StanzaFormDiv" style="display:none;">
+            <form action="javascript:void(0);" class="loginForm" id="StanzaForm" name="StanzaForm">
+                <fieldset>
+                    <legend>Stanzalog Filter</legend>
+                    <div title="Only log stanzas of specified types">
+                        <label for="stanzatypes">Stanza Types</label>
+                        <select id="stanzatypes" name="stanzatypes" size=3 multiple>
+                            <option id="stanzatype_message" value="message"> message </option>
+                            <option id="stanzatype_iq" value="iq"> iq </option>
+                            <option id="stanzatype_presence" value="presence"> presence </option>
+                        </select>
+                    </div>
+                    <div title='Log only stanzas sent or received by the entered JIDs.&#xD;To only log stanzas in one direction, prepend with "from:" or "to:"&#xD;This filter matches if one of the entered JID matches.'>
+                        <label for="stanza_jids">Filter by JIDs</label>
+                        <textarea name="stanza_jids" id="stanza_jids" type="textarea" placeholder="from:test@domain.com" class="input"></textarea>
+                    </div>
+                    <div title='Log only stanzas that have a specific error code.&#xD;"All stanzas" will match all stanzas without checking for error codes&#xD;"Only errors" matches iff a stanza contains an error&#xD;"Without errors" matches only stanzas without an error code'>
+                        <label for="conditions">Stanza Types</label>
+                        <select id="stanza_conditions" name="conditions" size=5 multiple>
+                        </select>
+                    </div>
+                    <div title='Log only stanzas that that match any of the entered queries. The path is built of /-separated segments each representing an element, selected by either an XML namespace or an element name or both. The XML namespace is wrapped in { }. The final component can be prefixed with an @ character to match an attribute.'>
+                        <label for="stanza_queries">Filter by queries</label>
+                        <textarea name="stanza_queries" id="stanza_queries" type="textarea" placeholder="{http://jabber.org/protocol/disco#info}query/identity" class="input"></textarea>
+                    </div>
+                    <div title="If set, everything enclosed in the top tag (<message>, <iq> or <presence>) of stanzas will be stripped before logging. Only uncheck this if you really need complete stanzas in your analysis.">
+                        <label for="top">Only log top tag</label>
+                        <input style="display:inline-block;height:1.5em;width:1.5em;" name="top" type=checkbox id="stanza_top"></input>
+                    </div>
+                    <div title="If empty, logs will contain the top-tag or complete stanzas.&#xD;If non-empty, the query in this field is used to extract data in matched stanzas.&#xD;The query is built of /-separated segments each representing an element, selected by either an XML namespace or an element name or both. The XML namespace is wrapped in { }. The final component can be prefixed with an @ character to match an attribute, or be a single # character to return the text content of the matching element.">
+                        <label for="stanza_output">Filter Output</label>
+                        <input name="stanza_output" id="stanza_output" type="input" placeholder="{urn:xmpp:delay}delay@stamp" class="input"/>
+                    </div>
+                    <div title='Only log stanzas send in the selected direction, from the servers point of view.&#xD;(The "Log IQ responses" option will still work as described if only one direction is selected)'>
+                        <label for="direction">Filter directions</label>
+                        <select id="stanza_direction" name="direction" size=1>
+                        </select>
+                    </div>
+                    <div title='If checked, all text content enclosed in stanzas will be replaced with "_" characters before logging. This allows for collaborative use of the system without compromising chat message sent between users.'>
+                        <label for="private">Protect private data</label>
+                        <input style="display:inline-block;height:1.5em;width:1.5em;" name="private" type=checkbox id="stanza_private"></input>
+                    </div>
+                    <div title='If checked, when a filter matches an <iq> stanza, the response to that stanza will also be matched by the filter.'>
+                        <label for="iqresponse">Log IQ responses</label>
+                        <input style="display:inline-block;height:1.5em;width:1.5em;" name="iqresponse" type=checkbox id="stanza_iqresponse"></input>
+                    </div>
+                    <div>
+                        <button type="button" id="sendStanza">Start Logging</button>
+                        <button type="button" id="cancelStanza">Cancel</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div id="StatusFormDiv" style="display:none;">
+            <form action="javascript:void(0);" class="loginForm" id="StatusForm" name="StanzaForm">
+                <fieldset>
+                    <legend>Statuslog Filter</legend>
+                    <div title="Select at least one statistic. To select multiple, drag with the mouse or use ctrl+click">
+                        <label for="status_stats">Statistics</label>
+                        <div>
+                            <button type="button" id="statistictsAll">Select All</button>
+                            <button type="button" id="statistictsNone">Select None</button>
+                        </div>
+                        <select id="status_stats" name="status_stats" size=10 multiple>
+                        </select>
+                    </div>
+                    <div title="Request an update for the selected statistics every X seconds.&#xD;(The server may choose to send logs in greater intervals under high load)">
+                        <label for="status_interval">Interval</label>
+                        <input name="status_interval" id="status_interval" type="input" placeholder="10" class="input"/>
+                    </div>
+                    <div title="Only include statistics that changed in every update to preserve bandwith" style="display: none;">
+                        <label for="iqresponse">Only updated</label>
+                        <input style="display:inline-block;height:1.5em;width:1.5em;" name="iqresponse" type=checkbox id="status_onupdate"></input>
+                    </div>
+                    <div>
+                        <button type="button" id="sendStatus">Start Logging</button>
+                        <button type="button" id="cancelStatus">Cancel</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div title="Active logging sessions are shown here in the form <server> - <log type> - <session id>&#xD;Clicking the Stop button will terminate the session." id="SessionsDiv" style="display:none;">
+            <form action="javascript:void(0);" class="loginForm" id="LogForm" name="LogForm">
+                <fieldset>
+                    <legend>Active Sessions</legend>
+                </fieldset>
+            </form>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'logexchange-selector',
+            properties: {
+            },
+
+            // Element Lifecycle
+
+            /**
+             * Called after all elements have been configured. Initializes the element.
+             *
+             */
+            ready: function() {
+                selector = null;
+
+                var gadget;
+                gadget = new SelectorGadget(function(envelope, message, gadget) {});
+                console.log("SelectorGadget: ", gadget);
+                gadget.init_ui();
+            }
+
+        });
+    </script>
+</dom-module>
